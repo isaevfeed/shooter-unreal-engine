@@ -19,9 +19,12 @@ ASTUBaseWeapon::ASTUBaseWeapon()
 	SetRootComponent(SkeletalMesh);
 }
 
-void ASTUBaseWeapon::Fire()
+void ASTUBaseWeapon::StartFire()
 {
-	MakeShot();
+}
+
+void ASTUBaseWeapon::StopFire()
+{
 }
 
 // Called when the game starts or when spawned
@@ -30,27 +33,11 @@ void ASTUBaseWeapon::BeginPlay()
 	Super::BeginPlay();
 	
 	check(SkeletalMesh);
+	CurrentAmmo = DefaultAmmo;
 }
 
 void ASTUBaseWeapon::MakeShot()
 {
-	if (!GetWorld()) return;
-
-	FVector LineStart, LineEnd;
-	FHitResult HitResult;
-	if (!MakeTrace(HitResult, LineStart, LineEnd)) return;
-
-	MakeDamage(HitResult);
-
-	if (HitResult.bBlockingHit) {
-
-		DrawDebugLine(GetWorld(), GetMuzzleSocketTransform(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 24, FColor::Red, false, 5.0f, 0, 5.0f);
-	}
-	else {
-		DrawDebugLine(GetWorld(), GetMuzzleSocketTransform(), LineEnd, FColor::Red, false, 3.0f, 0, 3.0f);
-
-	}
 }
 
 AController* ASTUBaseWeapon::GetPlayerController() const
@@ -111,4 +98,37 @@ bool ASTUBaseWeapon::GetSocketTransform(FVector& LineStart, FVector& LineEnd)
 	LineEnd = LineStart + MuzzleDestination * ShotDistance;
 
 	return true;
+}
+
+void ASTUBaseWeapon::DecreeseAmmo() {
+	if (IsAmmoEmpty()) return;
+
+	CurrentAmmo.Bullets -= 1;
+	LogAmmo();
+
+	if (IsClipEmpty() && !IsAmmoEmpty()) {
+		ChangeClip();
+	}
+}
+
+bool ASTUBaseWeapon::IsAmmoEmpty() const {
+	return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+}
+
+bool ASTUBaseWeapon::IsClipEmpty() const {
+	return CurrentAmmo.Bullets == 0;
+}
+
+void ASTUBaseWeapon::ChangeClip() {
+	if (IsAmmoEmpty()) return;
+
+	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+	CurrentAmmo.Clips -= 1;
+}
+
+void ASTUBaseWeapon::LogAmmo() {
+	FString Ammo = "Ammo : " + FString::FromInt(CurrentAmmo.Bullets) + "/";
+	Ammo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
+
+	UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), *Ammo);
 }

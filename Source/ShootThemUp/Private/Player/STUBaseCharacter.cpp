@@ -28,13 +28,13 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& InitObj)
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
+	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
+
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 
 	HealthRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthRenderComponent");
 	HealthRenderComponent->SetupAttachment(GetRootComponent());
 	HealthRenderComponent->bOwnerNoSee = true;
-
-	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 }
 
 bool ASTUBaseCharacter::IsRunning()
@@ -86,7 +86,9 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASTUBaseCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &ASTUBaseCharacter::StopRun);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
+	PlayerInputComponent->BindAction("NextWeapon", IE_Released, WeaponComponent, &USTUWeaponComponent::NextWeapon);
 }
 
 void ASTUBaseCharacter::MoveForward(float Amount)
