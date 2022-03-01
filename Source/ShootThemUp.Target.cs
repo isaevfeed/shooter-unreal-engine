@@ -13,3 +13,4 @@ public class ShootThemUpTarget : TargetRules
 		ExtraModuleNames.AddRange( new string[] { "ShootThemUp" } );
 	}
 }
+	

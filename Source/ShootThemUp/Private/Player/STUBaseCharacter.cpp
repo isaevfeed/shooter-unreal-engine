@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Player/STUBaseCharacter.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
@@ -28,13 +27,13 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& InitObj)
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
-	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
-
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 
 	HealthRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthRenderComponent");
 	HealthRenderComponent->SetupAttachment(GetRootComponent());
 	HealthRenderComponent->bOwnerNoSee = true;
+
+	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 }
 
 bool ASTUBaseCharacter::IsRunning()
@@ -89,6 +88,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
 	PlayerInputComponent->BindAction("NextWeapon", IE_Released, WeaponComponent, &USTUWeaponComponent::NextWeapon);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Reload);
 }
 
 void ASTUBaseCharacter::MoveForward(float Amount)

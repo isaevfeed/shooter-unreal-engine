@@ -8,6 +8,8 @@
 
 class USkeletalMeshComponent;
 
+DECLARE_MULTICAST_DELEGATE(FOnReloadFinished);
+
 USTRUCT(BlueprintType)
 struct FAmmoData
 {

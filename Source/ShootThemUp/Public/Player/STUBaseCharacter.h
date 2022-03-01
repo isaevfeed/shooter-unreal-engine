@@ -41,9 +41,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Component")
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	USTUWeaponComponent* WeaponComponent;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
 	USTUHealthComponent* HealthComponent;
 
@@ -52,6 +49,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animations")
 	UAnimMontage* DeathAnimMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapons")
+	USTUWeaponComponent* WeaponComponent;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

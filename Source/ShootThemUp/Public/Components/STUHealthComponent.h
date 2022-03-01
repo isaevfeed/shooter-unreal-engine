@@ -20,7 +20,11 @@ public:
 
 	float GetHealth() const { return Health; }
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	bool IsDead() const { return Health <= 0; };
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercent() { return Health / MaxHealth; }
 
 	FOnDeath OnDeath;
 	FOnHealthChanged OnHealthChanged;

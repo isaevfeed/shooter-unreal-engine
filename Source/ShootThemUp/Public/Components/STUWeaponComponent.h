@@ -8,6 +8,18 @@
 
 class ASTUBaseWeapon;
 
+USTRUCT(BlueprintType)
+struct FWeaponData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	TSubclassOf<ASTUBaseWeapon> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	UAnimMontage* ReloadAnimMontage;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
 {
@@ -19,10 +31,11 @@ public:
 	void StartFire();
 	void StopFire();
 	void NextWeapon();
+	void Reload();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-	TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
+	TArray<FWeaponData> WeaponData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 	FName WeaponAttachPointName = "WeaponPoint";
@@ -46,8 +59,11 @@ private:
 	UPROPERTY()
 	int32 CurrentWeaponIndex = 0;
 
+	UAnimMontage* CurrentReloadAnimMontage = nullptr;
+
 	UPROPERTY()
 	bool EquipWeaponInProgress = false;
+	bool ReloadWeaponInProgress = false;
 
 	void SpawnWeapons();
 	void EquipWeapon(int32 WeaponIndex);
@@ -55,7 +71,25 @@ private:
 	void PlayAnimMontage(UAnimMontage* AnimMontage);
 	void InitAnimations();
 	void OnEquipFinished(USkeletalMeshComponent* MeshComp);
+	void OnReloadFinished(USkeletalMeshComponent* MeshComp);
 
 	bool CanEquip() const;
+	bool CanReload() const;
 	bool CanFire() const;
+
+	template<typename T>
+	T* FindNotifyByClass(UAnimSequenceBase* Animation)
+	{
+		if (!Animation) return nullptr;
+
+		for (auto Notify : Animation->Notifies) {
+			auto NotifyInit = Cast<T>(Notify.Notify);
+
+			if (NotifyInit) {
+				return NotifyInit;
+			}
+		}
+
+		return nullptr;
+	}
 };

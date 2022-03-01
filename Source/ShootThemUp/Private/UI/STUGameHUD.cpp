@@ -3,10 +3,21 @@
 
 #include "UI/STUGameHUD.h"
 #include "Engine/Canvas.h"
+#include "Blueprint/UserWidget.h"
 
 void ASTUGameHUD::DrawHUD()
 {
 	DrawCross();
+}
+
+void ASTUGameHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto Widget = CreateWidget<UUserWidget>(GetWorld(), PlayerHudClass);
+	if (Widget) {
+		Widget->AddToViewport();
+	}
 }
 
 void ASTUGameHUD::DrawCross()
