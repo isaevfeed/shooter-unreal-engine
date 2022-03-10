@@ -27,6 +27,11 @@ void ASTUBaseWeapon::StopFire()
 {
 }
 
+FAmmoData ASTUBaseWeapon::GetCurrentAmmo() const
+{
+	return CurrentAmmo;
+}
+
 // Called when the game starts or when spawned
 void ASTUBaseWeapon::BeginPlay()
 {

@@ -14,6 +14,14 @@ USTUWeaponComponent::USTUWeaponComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+bool USTUWeaponComponent::GetWeaponAmmoData(FAmmoData& Data) const
+{
+	if (CurrentWeapon) {
+		Data = CurrentWeapon->GetCurrentAmmo();
+	}
+
+	return false;
+}
 
 void USTUWeaponComponent::StartFire()
 {
@@ -114,6 +122,7 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	}
 
 	CurrentWeapon = Weapons[WeaponIndex];
+
 	const auto CurrentReloadAnim = WeaponData.FindByPredicate([&](const FWeaponData& Data) {
 		return Data.WeaponClass == CurrentWeapon->GetClass();
 	});

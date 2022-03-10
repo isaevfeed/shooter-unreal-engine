@@ -18,6 +18,8 @@ public:
 	// Sets default values for this component's properties
 	USTUHealthComponent();
 
+	void HealActor(float HealAmount) { SetHealth(Health + HealAmount); };
+
 	float GetHealth() const { return Health; }
 
 	UFUNCTION(BlueprintCallable, Category = "Health")

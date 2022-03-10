@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "STUCharacterMovementComponent.h"
 #include "Player/STUBaseCharacter.h"
-#include "Components/STUCharacterMovementComponent.h"
 
 float USTUCharacterMovementComponent::GetMaxSpeed() const
 {

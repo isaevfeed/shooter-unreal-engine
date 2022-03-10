@@ -36,6 +36,8 @@ public:
 	virtual void StartFire();
 	virtual void StopFire();
 
+	FAmmoData GetCurrentAmmo() const;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	USkeletalMeshComponent* SkeletalMesh;
